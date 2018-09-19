@@ -20,7 +20,10 @@ def main(argv=None):
 
     d = journal_abbrev(d, args.long_journal_names)
 
-    tools.write(d, args.outfile, "braces", tab_indent=False)
+    key_order = list(data.entries.keys()) if args.preserve_order else None
+
+    tools.write(d, args.outfile, "braces", tab_indent=False,
+                key_order=key_order)
     return
 
 
@@ -46,6 +49,12 @@ def _get_parser():
         type=argparse.FileType("w"),
         default=sys.stdout,
         help="output BibTeX file (default: stdout)",
+    )
+    parser.add_argument(
+        "--preserve-order",
+        action="store_true",
+        help="preserve order of entries "
+             "(default: false, order always preserved for Python 3.6+)"
     )
     parser.add_argument(
         "-l",

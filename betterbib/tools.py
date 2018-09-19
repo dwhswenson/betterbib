@@ -345,7 +345,7 @@ def heuristic_unique_result(results, d):
     raise UniqueError("Could not find a positively unique match.")
 
 
-def write(od, file_handle, delimeter_type, tab_indent):
+def write(od, file_handle, delimeter_type, tab_indent, key_order=None):
     # Create the dictionary only once
     dictionary = create_dict()
 
@@ -355,6 +355,11 @@ def write(od, file_handle, delimeter_type, tab_indent):
     ]
 
     brace_delimeters = delimeter_type == "braces"
+
+    if key_order:
+        od_items = ((key, od[key]) for key in key_order)
+    else:
+        od_items = od.items()
 
     # Add segments for each bibtex entry in order
     segments.extend(
@@ -366,7 +371,7 @@ def write(od, file_handle, delimeter_type, tab_indent):
                 tab_indent=tab_indent,
                 dictionary=dictionary,
             )
-            for bib_id, d in od.items()
+            for bib_id, d in od_items
         ]
     )
 
